@@ -25,7 +25,18 @@ class MyConstant {
     'images/image9.png',
   ];
 
-  
+  List<String> nameDesks = [
+    'โต๊ะ 1',
+    'โต๊ะ 2',
+    'โต๊ะ 3',
+    'โต๊ะ 4',
+    'โต๊ะ VIP1',
+    'โต๊ะ VIP2',
+    'โต๊ะ VIP3',
+    'โต๊ะ VIP4'
+  ];
+
+  String domain = 'https://d2ce2a378e21.ngrok.io';
 
   MyConstant();
 }
