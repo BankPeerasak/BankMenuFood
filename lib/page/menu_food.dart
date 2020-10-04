@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:bankmenufood/models/food_model.dart';
+import 'package:bankmenufood/models/order_sqlite_model.dart';
 import 'package:bankmenufood/utirity/my_constant.dart';
 import 'package:bankmenufood/utirity/my_style.dart';
 import 'package:bankmenufood/utirity/normal_dialog.dart';
+import 'package:bankmenufood/utirity/sqlite_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -126,58 +128,85 @@ class _MenuFoodState extends State<MenuFood> {
       context: context,
       builder: (context) {
         int amount = 1;
-        return StatefulBuilder(builder: (context, setState) {
-          return SimpleDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(foodModel.nameFood),
-              Text(foodModel.price),
-            ],
-          ),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SimpleDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(foodModel.nameFood),
+                  Text(foodModel.price),
+                ],
+              ),
               children: [
-                IconButton(
-                    icon: Icon(Icons.add_circle_outline), onPressed: () {
-                      setState(() {
-                        amount++;
-                        print('amout = $amount');
-                      });
-                    },),
-                Text('$amount'),
-                IconButton(
-                    icon: Icon(Icons.remove_circle_outline), onPressed: () {
-                      if (amount == 1 ) {
-                        amount = 1;
-                        
-                      } else {
-                       setState(() {
-                        amount--;
-                        print('amout = $amount');
-                      });
-                      }
-                    },),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: null,
-                  child: Text('OK'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline),
+                      onPressed: () {
+                        setState(() {
+                          amount++;
+                          print('amout = $amount');
+                        });
+                      },
+                    ),
+                    Text('$amount'),
+                    IconButton(
+                      icon: Icon(Icons.remove_circle_outline),
+                      onPressed: () {
+                        if (amount == 1) {
+                          amount = 1;
+                        } else {
+                          setState(() {
+                            amount--;
+                            print('amout = $amount');
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('NO'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        insertOrToSQLite(foodModel, amount);
+                      },
+                      child: Text('OK'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('NO'),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          },
         );
-        },);
       },
     );
+  }
+
+  Future<Null> insertOrToSQLite( FoodModel foodModel, int amount)async {
+
+     int priceInt = int.parse(foodModel.price);
+     int sumInt = priceInt * amount;
+
+
+    OrderSQLModel model = OrderSQLModel(
+      desk: chooseDesk,
+      idFood: foodModel.id,
+      nameFood: foodModel.nameFood,
+      price: foodModel.price, 
+      amount: amount.toString(),
+      sum: sumInt.toString()
+    );
+
+   SQLiteHelper().InsertDataToSQLite(model);
+
   }
 }

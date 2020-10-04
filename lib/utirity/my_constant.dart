@@ -36,7 +36,7 @@ class MyConstant {
     'โต๊ะ VIP4'
   ];
 
-  String domain = 'https://d2ce2a378e21.ngrok.io';
+  String domain = 'https://9e21ff401695.ngrok.io';
 
   MyConstant();
 }
