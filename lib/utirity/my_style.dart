@@ -13,6 +13,11 @@ class MyStyle {
         color: Colors.purple.shade700,
         fontWeight: FontWeight.w500,
       );
+      TextStyle titleStyeH3() => TextStyle(
+        fontSize: 14,
+        color: Colors.purple.shade700,
+        fontWeight: FontWeight.w500,
+      );
 
   MyStyle();
 }
